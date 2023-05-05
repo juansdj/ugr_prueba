@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link rel="stylesheet" href="#{resource['primefaces.css']}" />
+	<script src="#{resource['primefaces.js']}"></script>
+</h:head>
+<body>
+	<h:form id="form">
+		<h:outputText id="output"
+			value="#{asientoController.selectedAsiento.codigoasic}" />
+
+		<p:dataTable scrollable="true" scrollHeight="300"
+			style="width: 60%; margin: 0 auto; border: 1px solid black;"
+			id="tablaAsientos" value="#{asientoController.listAsientos}"
+			var="user" rowKey="#{user.codigoasic}"
+			selection="#{asientoController.selectedAsiento}"
+			selectionMode="single">
+			<p:ajax event="rowSelect" listener="#{asientoController.onRowSelect}"
+				update=":form:tableDetalle, :form:output" />
+			<f:facet name="header">
+				<h:outputText value="Tabla de asientos contables" />
+				<p:commandButton style=" margin-left:60%" value="Nuevo"
+					onclick="PF('modalAgregar').show();" />
+			</f:facet>
+			<p:column>
+				<f:facet name="header">Codigo</f:facet>
+        #{user.codigoasic}
+    </p:column>
+			<p:column>
+				<f:facet name="header">Numero</f:facet>
+        #{user.numeroasic}
+        </p:column>
+			<p:column>
+				<f:facet name="header">Fecha</f:facet>
+        #{user.fechaasic}
+    </p:column>
+			<p:column>
+				<f:facet name="header">Descripcion</f:facet>
+        #{user.descripasic}
+    </p:column>
+			<p:column>
+				<f:facet name="header">Observacion</f:facet>
+        #{user.observasic}
+    </p:column>
+
+		</p:dataTable>
+		<br />
+
+		<p:dataTable
+			style="width: 60%; margin: 0 auto; border: 1px solid black;"
+			id="tableDetalle" selection="#{detalleController.selectedDetalle}"
+			scrollable="true" scrollHeight="300"
+			value="#{detalleController.listDetalle}" var="detalle">
+			<f:facet name="header">
+				<h:outputText value="Tabla detalle de Asiento: #{asientoController.selectedAsiento.numeroasic}" />
+				<p:commandButton style=" margin-left:60%" value="Nuevo"
+					onclick="PF('modalAgregarDetalle').show();" />
+			</f:facet>
+			<p:column>
+				<f:facet name="header">Codigo</f:facet>
+        #{detalle.codigoasid}
+    </p:column>
+
+			<p:column>
+				<f:facet name="header">Descripcion</f:facet>
+        #{detalle.descripasid}
+    </p:column>
+			<p:column>
+				<f:facet name="header">Valor</f:facet>
+        #{detalle.valorasid}
+    </p:column>
+
+
+		</p:dataTable>
+	</h:form>
+	<p:dialog header="Agregar Asiento" widgetVar="modalAgregar"
+		modal="true">
+		<h:form>
+			<p:panelGrid columns="2">
+				<p:outputLabel value="Número de asiento:" for="numeroAsiento" />
+				<p:inputText id="numeroAsiento"
+					value="#{asientoController.nuevoAsiento.numeroasic}" />
+
+				<p:outputLabel value="Fecha:" for="fechaAsiento" />
+				<p:calendar id="fechaAsiento"
+					value="#{asientoController.nuevoAsiento.fechaasic}" showOn="button"
+					pattern="yyyy-MM-dd">
+				</p:calendar>
+
+				<p:outputLabel value="Descripción:" for="descripcionAsiento" />
+				<p:inputText id="descripcionAsiento"
+					value="#{asientoController.nuevoAsiento.descripasic}" />
+
+				<p:outputLabel value="Observaciones:" for="observacionesAsiento" />
+				<p:inputText id="observacionesAsiento"
+					value="#{asientoController.nuevoAsiento.observasic}" />
+
+				<p:outputLabel value="Estado:" for="estadoAsiento" />
+				<p:inputText id="estadoAsiento"
+					value="#{asientoController.nuevoAsiento.codigoesta}" />
+
+				<p:outputLabel value="Código de compañía:"
+					for="codigoCompaniaAsiento" />
+				<p:inputText id="codigoCompaniaAsiento"
+					value="#{asientoController.nuevoAsiento.codigocomp}" />
+
+				<p:outputLabel value="Código de usuario archivo:"
+					for="codigoUsuarioArchivoAsiento" />
+				<p:inputText id="codigoUsuarioArchivoAsiento"
+					value="#{asientoController.nuevoAsiento.codigouarc}" />
+
+				<p:outputLabel value="Código de usuario:" for="codigoUsuarioAsiento" />
+				<p:inputText id="codigoUsuarioAsiento"
+					value="#{asientoController.nuevoAsiento.codigousua}" />
+
+				<p:commandButton value="Guardar"
+					actionListener="#{asientoController.guardarNuevoAsiento}"
+					oncomplete="PF('modalAgregar').hide(); "
+					update="form:tablaAsientos">
+
+				</p:commandButton>
+				<p:commandButton value="Cancelar"
+					onclick="PF('modalAgregar').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog header="Agregar Detalle" widgetVar="modalAgregarDetalle"
+		modal="true">
+		<h:form>
+			<p:panelGrid columns="2">
+				<p:outputLabel value="Valor:" for="valorDetalle" />
+				<p:inputText id="valorDetalle"
+					value="#{detalleController.nuevoDetalleAsiento.valorasid}" />
+
+				<p:outputLabel value="Descripcion:" for="descripcionDetalle" />
+				<p:inputText id="descripcionDetalle"
+					value="#{detalleController.nuevoDetalleAsiento.descripasid}" />
+
+				<p:outputLabel value="Codigo Cuenta:" for="codigoCuentaDetalle" />
+				<p:inputText id="codigoCuentaDetalle"
+					value="#{detalleController.nuevoDetalleAsiento.codigoctac}" />
+
+				<p:outputLabel value="Codigo Tipo:" for="codigoTipoDetalle" />
+				<p:inputText id="codigoTipoDetalle"
+					value="#{detalleController.nuevoDetalleAsiento.codigoapli}" />
+
+
+				<p:commandButton value="Guardar"
+					actionListener="#{detalleController.guardarNuevoDetalle(asientoController.selectedAsiento.codigoasic)}"
+					oncomplete="PF('modalAgregarDetalle').hide();"
+					update=":form:tableDetalle" />
+				<p:commandButton value="Cancelar"
+					onclick="PF('modalAgregarDetalle').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:messages id="messages" />
+</body>
+</html>

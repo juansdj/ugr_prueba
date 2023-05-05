@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Login</title>
+	<style>
+.login-panel {
+	margin: 0 auto;
+	width: 50%;
+	border: 0px !important;
+}
+
+.logo {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.ui-panelgrid {
+	border: none;
+}
+</style>
+</h:head>
+
+<body>
+	<p:panel id="login-panel" header="Login" styleClass="centered">
+		<h:form>
+			<p:panelGrid columns="2" styleClass="login-panel" border="0">
+				<h:outputLabel for="username" value="Usuario: " />
+				<p:inputText id="username" value="#{loginController.username}"
+					required="true" />
+
+				<h:outputLabel for="password" value="Contraseña: " />
+				<p:password id="password" value="#{loginController.password}"
+					required="true" />
+
+			</p:panelGrid>
+			<br />
+			<p:commandButton style="margin: 0 auto; display: block;"
+				value="Iniciar Sesión" action="#{loginController.login}"
+				ajax="false" />
+
+			<p:messages id="messages" />
+		</h:form>
+	</p:panel>
+</body>
+</html>
